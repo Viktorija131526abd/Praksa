@@ -3,10 +3,8 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Support\Facades\DB;
 
-
-class CreateUsersTable extends Migration
+class AlterUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -15,23 +13,16 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('name', 200)->nullable();
-            $table->string('username', 200)->nullable();
+        Schema::table('users', function (Blueprint $table) {
             $table->string('mobile_number')->nullable();
-            $table->string('email', 200)->nullable();
-            $table->string('password', 200)->nullable();
-            $table->timestamps();
-            $table->unsignedBigInteger('class_id');
+            $table->unsignedBigInteger('class_id')->nullable();
             $table->string('gender', 50)->nullable();
             $table->string('image', 200)->nullable();
             $table->date('date_of_birth')->nullable();
-            $table->enum('role', ['admin', 'student'])->nullable();
+           // $table->enum('role', ['admin', 'direktor', 'profesor', 'student'])->nullable();
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
         });
-
     }
 
     /**
@@ -40,8 +31,9 @@ class CreateUsersTable extends Migration
      * @return void
      */
     public function down()
-
     {
-        Schema::dropIfExists('users');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn(['mobile_number', 'class_id', 'gender', 'image', 'date_of_birth', 'role', 'created_by', 'updated_by']);
+        });
     }
 }
