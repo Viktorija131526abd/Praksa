@@ -22,7 +22,34 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('admin'),
         ]);
 
+        $headmaster = User::create([
+            'name' => 'headmaster',
+            'email' => 'headmaster@example.com',
+            'password' => Hash::make('headmaster'),
+        ]);
+
+        $professor = User::create([
+            'name' => 'professor',
+            'email' => 'professor@example.com',
+            'password' => Hash::make('professor'),
+        ]);
+
+
+        $student = User::create([
+            'name' => 'student',
+            'email' => 'student@example.com',
+            'password' => Hash::make('student'),
+        ]);
+
+
+
         // Dodela uloge 'admin' korisniku
         Bouncer::assign('admin')->to($admin);
+        Bouncer::assign('headmaster')->to($headmaster);
+        Bouncer::assign('professor')->to($professor);
+        Bouncer::assign('student')->to($student);
+
+        Bouncer::allow('admin')->to('assign', 'headmaster');
+
     }
 }

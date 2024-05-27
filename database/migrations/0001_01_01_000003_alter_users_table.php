@@ -17,9 +17,7 @@ class AlterUsersTable extends Migration
             $table->string('mobile_number')->nullable();
             $table->unsignedBigInteger('class_id')->nullable();
             $table->string('gender', 50)->nullable();
-            $table->string('image', 200)->nullable();
             $table->date('date_of_birth')->nullable();
-           // $table->enum('role', ['admin', 'direktor', 'profesor', 'student'])->nullable();
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
         });

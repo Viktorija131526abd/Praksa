@@ -1,5 +1,9 @@
+<title>
+{{ __('Vehicle Parking Management System') }}
+</title>
+
 <x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
+    <form method="POST" action="{{ route('admin.store_headmaster') }}">
         @csrf
 
         <!-- Name -->
@@ -39,15 +43,14 @@
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
         </div>
 
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
+        <div class="flex items-center justify-content-between mt-4">
+            <a class="underline text-sm text-black dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('login') }}">
                 {{ __('Already registered?') }}
             </a>
 
-            <x-primary-button class="ms-4">
-                {{ __('Register') }}
-            </x-primary-button>
-
+            <x-danger-button class="bg-info ms-4">
+                {{ __('Create headmaster') }}
+            </x-danger-button>
         </div>
     </form>
 </x-guest-layout>

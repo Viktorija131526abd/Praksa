@@ -8,9 +8,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Silber\Bouncer\Database\HasRolesAndAbilities;
 
+
+
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasRolesAndAbilities; // Ili HasRoles ako koristite Spatie
 
     /**
      * The attributes that are mass assignable.
@@ -21,6 +23,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'gender',
+        'dob',
     ];
 
     /**
@@ -34,16 +38,13 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the attributes that should be cast.
+     * The attributes that should be cast to native types.
      *
-     * @return array<string, string>
+     * @var array<string, string>
      */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
-    use HasRolesAndAbilities;
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed', // Laravel 10+ supports this
+        'dob' => 'date',
+    ];
 }

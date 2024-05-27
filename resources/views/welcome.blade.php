@@ -32,13 +32,7 @@
         <h1 class="display-4">Welcome to the Student Management System.</h1>
         <p class="lead">The system for managing students, grades, and assignments.</p>
     </div>
-    @if (Route::has('login'))
-        @auth
-            <a href="{{ url('/dashboard') }}" class="btn btn-primary">Dashboard</a>
-        @else
-            <a href="{{ route('login') }}" class="btn btn-primary">Login</a>
-        @endauth
-    @endif
+    <a href="{{ route('login') }}" class="btn btn-primary">Login</a>
 </section>
 
 <!-- Main Content -->

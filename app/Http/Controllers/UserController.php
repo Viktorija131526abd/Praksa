@@ -46,4 +46,40 @@ class UserController extends Controller
 
         return redirect()->back()->with('success', 'User created successfully.');
     }
+
+    public function createHeadmasterForm()
+    {
+        return view('admin.create_headmaster');
+    }
+
+    public function storeHeadmaster(Request $request)
+    {
+        // Validacija podataka
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        // Kreiranje novog korisnika
+        $user = User::create([
+            'name' => $validatedData['name'],
+            'email' => $validatedData['email'],
+            'password' => bcrypt($validatedData['password']),
+        ]);
+
+        // Dodela uloge menadžera korisniku
+        // Ovde dodajte kod za dodelu uloge menadžera korisniku, koristeći Bouncer ili drugi alat za upravljanje ulogama
+        Bouncer::assign('headmaster')->to($user);
+
+        // Redirekcija nakon uspešnog dodavanja menadžera
+        return redirect()->route('dashboard')->with('success', 'Manager created successfully');
+    }
+    public function index()
+    {
+        $users = User::all();
+        return view('users.index', compact('users'));
+    }
+
+
 }
