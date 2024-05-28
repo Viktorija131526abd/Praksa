@@ -78,7 +78,53 @@ class UserController extends Controller
     public function index()
     {
         $users = User::all();
-        return view('users.index', compact('users'));
+
+        $canEdit = Bouncer::can('edit-users');
+        $canDelete = Bouncer::can('delete-users');
+
+        return view('users.index', compact('users', 'canEdit', 'canDelete',));
+    }
+
+
+    public function edit(User $user)
+    {
+        return view('users.edit', compact('user'));
+    }
+
+    public function update(Request $request, User $user)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'role' => 'sometimes|string|in:admin,user,moderator' // Adjust roles as needed
+        ]);
+
+        // Prevent updating email or username
+        $data = $request->except(['email', 'username']);
+
+        // Prevent changing role to highest role
+        if (!Bouncer::is($user)->an('Admin') && $request->role === 'admin') {
+            return redirect()->back()->withErrors(['role' => 'You cannot change the role to admin.']);
+        }
+
+        // Update user data
+        $user->update($data);
+
+        // Update user role if necessary
+        if ($request->has('role')) {
+            Bouncer::sync($user)->roles([$request->role]);
+        }
+
+        return redirect()->route('users.edit', $user)->with('success', 'User updated successfully.');
+    }
+
+    public function destroy(User $user)
+    {
+        if ($user->roles->pluck('name')->contains('admin')) {
+            return redirect()->back()->withErrors(['error' => 'Cannot delete admin user.']);
+        }
+        $user->delete();
+
+        return redirect()->route('dashboard')->with('success', 'User deleted successfully.');
     }
 
 

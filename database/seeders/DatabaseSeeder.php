@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+
         $admin = Bouncer::role()->findOrCreateRoles(['admin', 'headmaster', 'professor', 'student']);
         // Kreiranje admina
         $admin = User::create([
@@ -21,6 +22,8 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@example.com',
             'password' => Hash::make('admin'),
         ]);
+        Bouncer::assign('admin')->to($admin);
+
 
         $headmaster = User::create([
             'name' => 'headmaster',
@@ -49,7 +52,10 @@ class DatabaseSeeder extends Seeder
         Bouncer::assign('professor')->to($professor);
         Bouncer::assign('student')->to($student);
 
-        Bouncer::allow('admin')->to('assign', 'headmaster');
+        //Bouncer::allow('admin')->to('assign', 'headmaster');
 
+
+        Bouncer::allow('admin')->to('edit-users');
+        Bouncer::allow('admin')->to('delete-users');
     }
 }
