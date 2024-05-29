@@ -15,7 +15,6 @@ class AlterUsersTable extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->string('mobile_number')->nullable();
-            $table->unsignedBigInteger('class_id')->nullable();
             $table->string('gender', 50)->nullable();
             $table->date('date_of_birth')->nullable();
             $table->unsignedBigInteger('created_by')->nullable();
@@ -31,7 +30,7 @@ class AlterUsersTable extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn(['mobile_number', 'class_id', 'gender', 'image', 'date_of_birth', 'role', 'created_by', 'updated_by']);
+            $table->dropColumn(['mobile_number', 'gender', 'image', 'date_of_birth', 'role', 'created_by', 'updated_by']);
         });
     }
 }

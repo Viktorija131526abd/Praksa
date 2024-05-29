@@ -1,8 +1,10 @@
 <!-- login.blade.php -->
 <x-guest-layout>
+    <a href="/" class="text-center">
+        <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
+    </a>
     <form method="POST" action="{{ route('login') }}" class="container-sm my-5 p-5 rounded-3 border shadow-lg text-primary bg-white">
         @csrf
-
         <!-- Session Status -->
         <x-auth-session-status class="mb-4" :status="session('status')" />
 

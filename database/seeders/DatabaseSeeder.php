@@ -54,8 +54,7 @@ class DatabaseSeeder extends Seeder
 
         //Bouncer::allow('admin')->to('assign', 'headmaster');
 
-
-        Bouncer::allow('admin')->to('edit-users');
-        Bouncer::allow('admin')->to('delete-users');
+        Bouncer::allow('admin')->to(['edit-users', 'delete-users']);
+        Bouncer::allow('headmaster')->to(['edit-users', 'delete-users']);
     }
 }

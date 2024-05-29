@@ -20,9 +20,7 @@
 <body class="font-sans text-gray-900 antialiased bg-primary">
 <div class="min-h-screen d-flex flex-column justify-content-center align-items-center">
 
-        <a href="/" class="text-center">
-            <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-        </a>
+
         {{ $slot }}
 
 </div>

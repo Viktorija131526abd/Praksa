@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Classes;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -49,32 +50,95 @@ class UserController extends Controller
 
     public function createHeadmasterForm()
     {
-        return view('admin.create_headmaster');
+        $classes = Classes::all();
+        return view('admin.create_headmaster', ['classes' => $classes]);
     }
 
     public function storeHeadmaster(Request $request)
     {
-        // Validacija podataka
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
+            'phone' => 'required|string|max:255',
+            'gender' => 'required|string|max:255',
+            'classes_id' => 'required|exists:classes,id',
+            'date_of_birth' => 'required|date',
         ]);
 
-        // Kreiranje novog korisnika
         $user = User::create([
             'name' => $validatedData['name'],
             'email' => $validatedData['email'],
             'password' => bcrypt($validatedData['password']),
+            'phone' => $validatedData['phone'],
+            'gender' => $validatedData['gender'],
+            'classes_id' => $validatedData['classes_id'],
+            'date_of_birth' => $validatedData['date_of_birth'],
         ]);
 
-        // Dodela uloge menadžera korisniku
-        // Ovde dodajte kod za dodelu uloge menadžera korisniku, koristeći Bouncer ili drugi alat za upravljanje ulogama
         Bouncer::assign('headmaster')->to($user);
 
-        // Redirekcija nakon uspešnog dodavanja menadžera
-        return redirect()->route('dashboard')->with('success', 'Manager created successfully');
+        return redirect()->route('dashboard')->with('success', 'Headmaster created successfully');
     }
+
+    public function createStudentForm()
+    {
+        $classes = Classes::all();
+        return view('professor.create_student', ['classes' => $classes]);
+    }
+
+    public function storeStudent(Request $request)
+    {
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed',
+            'phone' => 'required|string|max:255',
+            'gender' => 'required|string|max:255',
+            'classes_id' => 'required|exists:classes,id',
+            'date_of_birth' => 'required|date',
+        ]);
+
+        $user = User::create([
+            'name' => $validatedData['name'],
+            'email' => $validatedData['email'],
+            'password' => bcrypt($validatedData['password']),
+            'phone' => $validatedData['phone'],
+            'gender' => $validatedData['gender'],
+            'classes_id' => $validatedData['classes_id'],
+            'date_of_birth' => $validatedData['date_of_birth'],
+        ]);
+
+        Bouncer::assign('student')->to($user);
+
+        return redirect()->route('dashboard')->with('success', 'Student created successfully');
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public function index()
     {
         $users = User::all();
@@ -83,6 +147,42 @@ class UserController extends Controller
         $canDelete = Bouncer::can('delete-users');
 
         return view('users.index', compact('users', 'canEdit', 'canDelete',));
+    }
+
+    public function index_headmasters()
+    {
+        $users = User::whereHas('roles', function ($query) {
+            $query->where('name', 'headmaster');
+        })->get();
+
+        $canEdit = Bouncer::can('edit-users');
+        $canDelete = Bouncer::can('delete-users');
+
+        return view('users.index_headmasters', compact('users', 'canEdit', 'canDelete',));
+    }
+
+    public function index_professors()
+    {
+        $users = User::whereHas('roles', function ($query) {
+            $query->where('name', 'professor');
+        })->get();
+
+        $canEdit = Bouncer::can('edit-users');
+        $canDelete = Bouncer::can('delete-users');
+
+        return view('users.index_professors', compact('users', 'canEdit', 'canDelete',));
+    }
+
+    public function index_students()
+    {
+        $users = User::whereHas('roles', function ($query) {
+            $query->where('name', 'student');
+        })->get();
+
+        $canEdit = Bouncer::can('edit-users');
+        $canDelete = Bouncer::can('delete-users');
+
+        return view('users.index_students', compact('users', 'canEdit', 'canDelete',));
     }
 
 
@@ -126,6 +226,29 @@ class UserController extends Controller
 
         return redirect()->route('dashboard')->with('success', 'User deleted successfully.');
     }
+
+
+    public function createClassForm()
+    {
+        return view('professor.add_class');
+    }
+
+    public function storeClass(Request $request)
+    {
+        $validatedData = $request->validate([
+            'class_name' => 'required|unique:classes|max:255',
+            'section' => 'required|in:I,II,III,IV',
+        ]);
+
+        // Spremi novi čas
+        $class = new Classes();
+        $class->class_name = $validatedData['class_name'];
+        $class->section = $validatedData['section'];
+        $class->save();
+
+        return redirect()->route('professor.add_class')->with('success', 'Čas je uspješno dodan!');
+    }
+
 
 
 }

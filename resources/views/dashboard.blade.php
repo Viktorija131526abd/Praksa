@@ -30,9 +30,24 @@
                             {{ session('success') }}
                         </div>
                     @endif
-                    <x-dropdown-link :href="route('admin.create_headmaster')">
-                        {{ __('Kreiraj') }}
-                    </x-dropdown-link>
+                        @if(Bouncer::is(Auth::user())->an('admin'))
+                            <x-dropdown-link :href="route('admin.create_headmaster')">
+                                {{ __('Kreiraj direktora') }}
+                            </x-dropdown-link>
+                        @endif
+{{--                        @if(Bouncer::is(Auth::user())->an('headmaster'))--}}
+{{--                            <x-dropdown-link :href="route('admin.create_proffesor')">--}}
+{{--                                {{ __('Kreiraj profesora') }}--}}
+{{--                            </x-dropdown-link>--}}
+{{--                        @endif--}}
+                        @if(Bouncer::is(Auth::user())->an('professor'))
+                            <x-dropdown-link :href="route('professor.create_student')">
+                                {{ __('Kreiraj studenta') }}
+                            </x-dropdown-link>
+                        @endif
+{{--                        @if(Bouncer::is(Auth::user())->an('student'))--}}
+
+{{--                        @endif--}}
                 </div>
             </div>
         </div>

@@ -3,7 +3,7 @@
 </title>
 
 <x-guest-layout>
-    <form method="POST" action="{{ route('admin.store_headmaster') }}">
+    <form method="POST" action="{{ route('professor.create_student') }}">
         @csrf
         @if ($errors->any())
             <div class="alert alert-danger" role="alert">
@@ -95,7 +95,7 @@
 
         <div class="flex items-center justify-content-between mt-4">
             <x-danger-button class="bg-info ms-4">
-                {{ __('Create headmaster') }}
+                {{ __('Create student') }}
             </x-danger-button>
         </div>
     </form>

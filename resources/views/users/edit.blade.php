@@ -48,8 +48,6 @@
         </div>
         <button type="submit" class="btn btn-primary">Update User</button>
     </form>
-
-    <!-- Dodajemo dugme koje vodi na dashboard -->
     <a href="{{ route('dashboard') }}" class="btn btn-secondary mt-3">Back to Dashboard</a>
 </div>
 
